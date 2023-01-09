@@ -9,6 +9,8 @@ import Paper from '@mui/material/Paper'
 
 import useStore from '../store'
 import useNest from '../hooks/useNest'
+import { useSubscription } from '@apollo/client'
+import { PILOT_UPDATED } from '../graphql/subscriptions'
 /**
  *
  * @param {*} lastSeen date to compare
@@ -61,8 +63,20 @@ function createPilotData({
 
 export default function PilotTable() {
   const nest = useStore((state) => state.nest)
-  const { pilots, loading } = useNest({ getNestId: nest })
+  const { pilots, loading, nestData } = useNest({ getNestId: nest })
   const allPilots = pilots ? pilots.map((pilot) => createPilotData(pilot)) : []
+
+  //Listen for updated pilots
+  useSubscription(PILOT_UPDATED, {
+    variables: {
+      nestUrl: nestData.url,
+    },
+    onData: ({ data }) => {
+      //const updatedPilot = data.data.pilotUpdated.pilot
+      console.log(data)
+    },
+  })
+
   if (loading) {
     return <div>Loading pilots..</div>
   }
