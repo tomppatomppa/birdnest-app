@@ -9,21 +9,24 @@ import { GET_BIRDS } from '../graphql/queries'
 import useBirds from '../hooks/useBirds'
 import useStore from '../store'
 
+const defaultNestUrl = 'assignments.reaktor.com/birdnest/drones'
+
 const SelectBird = () => {
   const { birds, loading, error } = useBirds(GET_BIRDS)
-  const bird = useStore((state) => state.bird)
-  const setBird = useStore((state) => state.setBird)
+  const { bird, setBird, setNest } = useStore((state) => state)
 
-  //Set default to first bird in array on initial mount
   useEffect(() => {
+    //Set default to first bird in array on initial mount
     const setDefaultBird = () => {
       const [defaultBird] = birds
       setBird(defaultBird.name)
+      //Set default nest for testing
+      setNest(defaultNestUrl)
     }
     if (!loading && !error) {
       setDefaultBird()
     }
-  }, [birds, loading, error, setBird])
+  }, [birds, loading, error, setBird, setNest])
 
   if (loading) {
     return <div>loading birds..</div>

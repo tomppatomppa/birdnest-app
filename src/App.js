@@ -1,27 +1,16 @@
-import { gql } from '@apollo/client'
-import { useState } from 'react'
+import Bird from './components/Bird'
 import Navbar from './components/Navbar'
+import PilotTable from './components/PilotTable'
 import SelectBird from './components/SelectBird'
-import useStore from './store'
-const query = gql`
-  query Query {
-    getBirds {
-      name
-    }
-  }
-`
+
 function App() {
-  const [selectedBird, setSelectedBird] = useState('')
-  const bird = useStore((state) => state.bird)
-  console.log(bird)
   return (
     <div className="App">
       <Navbar>
-        <SelectBird
-          selectedBird={selectedBird}
-          setSelectedBird={setSelectedBird}
-        />
+        <SelectBird />
       </Navbar>
+      <Bird />
+      <PilotTable />
     </div>
   )
 }
