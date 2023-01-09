@@ -63,17 +63,18 @@ function createPilotData({
 
 export default function PilotTable() {
   const nest = useStore((state) => state.nest)
-  const { pilots, loading, nestData } = useNest({ getNestId: nest })
+  const { pilots, loading, nestData, setPilots } = useNest({ getNestId: nest })
   const allPilots = pilots ? pilots.map((pilot) => createPilotData(pilot)) : []
-
+  const [added, setAdded] = React.useState('')
   //Listen for updated pilots
   useSubscription(PILOT_UPDATED, {
     variables: {
       nestUrl: nestData.url,
     },
     onData: ({ data }) => {
-      //const updatedPilot = data.data.pilotUpdated.pilot
-      console.log(data)
+      const updatedPilot = data.data.pilotUpdated.pilot
+      setAdded(() => updatedPilot.pilotId)
+      setPilots(filterPilots(pilots, updatedPilot))
     },
   })
 
@@ -98,6 +99,11 @@ export default function PilotTable() {
             .reverse()
             .map((row) => (
               <TableRow
+                style={{
+                  backgroundColor:
+                    added === row.pilotId ? 'MediumSeaGreen' : 'WhiteSmoke',
+                  transition: '2s',
+                }}
                 key={row.pilotId}
                 sx={{
                   '&:last-child td, &:last-child th': { border: 0 },
