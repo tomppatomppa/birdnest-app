@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client'
-import { NEST_FIELDS } from './fragments'
+import { NEST_FIELDS, PILOT_FIELDS } from './fragments'
 
 export const GET_BIRDS = gql`
   query {
@@ -23,23 +23,18 @@ export const GET_BIRD = gql`
   }
   ${NEST_FIELDS}
 `
+
 export const GET_NEST = gql`
   query ($getNestId: String) {
     getNest(id: $getNestId) {
       ...NestFields
       violations {
-        pilotId
-        createdDt
-        email
-        firstName
-        lastName
-        lastSeen
-        phoneNumber
+        ...PilotFields
         drone {
           confirmedDistance
         }
       }
     }
   }
-  ${NEST_FIELDS}
+  ${NEST_FIELDS}, ${PILOT_FIELDS}
 `

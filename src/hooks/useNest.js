@@ -9,7 +9,7 @@ import { PILOT_UPDATED } from '../graphql/subscriptions'
  * @param {*} lastSeen date to compare
  * @returns Time difference in minutes between given date and current date
  */
-export function getTimeDifferenceMinutes(lastSeen) {
+export const getTimeDifferenceMinutes = (lastSeen) => {
   const diff = Math.abs(Date.parse(lastSeen) - Date.now())
   const minutes = Math.floor(diff / 1000 / 60)
 

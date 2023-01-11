@@ -8,3 +8,15 @@ export const NEST_FIELDS = gql`
     noFlyZoneMeters
   }
 `
+
+export const PILOT_FIELDS = gql`
+  fragment PilotFields on Pilot {
+    pilotId
+    createdDt
+    email
+    firstName
+    lastName
+    lastSeen
+    phoneNumber
+  }
+`
