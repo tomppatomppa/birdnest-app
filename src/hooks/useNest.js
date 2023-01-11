@@ -1,27 +1,76 @@
-import { useQuery } from '@apollo/client'
+import { useQuery, useSubscription } from '@apollo/client'
 import { useEffect, useState } from 'react'
 
 import { GET_NEST } from '../graphql/queries'
+import { PILOT_UPDATED } from '../graphql/subscriptions'
+
+/**
+ *
+ * @param {*} lastSeen date to compare
+ * @returns Time difference in minutes between given date and current date
+ */
+export function getTimeDifferenceMinutes(lastSeen) {
+  const diff = Math.abs(Date.parse(lastSeen) - Date.now())
+  const minutes = Math.floor(diff / 1000 / 60)
+
+  return minutes
+}
+/**
+ *
+ * @param {*} pilots existing array of pilots
+ * @param {*} updatedPilot updated pilot
+ * @returns Filter out updated pilot if it exists,
+ *  or if a pilot has NOT been seen in the last 10 minutes
+ *  add updated pilot to array
+ */
+const filterPilots = (pilots = [], updatedPilot) => {
+  const filteredPilots = pilots.filter(
+    (pilot) =>
+      pilot.pilotId !== updatedPilot.pilotId &&
+      getTimeDifferenceMinutes(pilot.lastSeen) < 10
+  )
+
+  return filteredPilots.concat(updatedPilot)
+}
 
 const useNest = (variables) => {
   const [nestData, setNestData] = useState([])
   const [pilots, setPilots] = useState([])
-  const { data, loading, ...result } = useQuery(GET_NEST, {
+
+  const { data, loading, error, ...result } = useQuery(GET_NEST, {
     variables: { ...variables },
     fetchPolicy: 'no-cache', //Turn off caching for pilots
+    skip: !variables.getNestId,
+  })
+
+  const resetAll = () => {
+    setNestData('')
+    setPilots([])
+  }
+
+  useSubscription(PILOT_UPDATED, {
+    variables: {
+      nestUrl: nestData.url,
+    },
+    skip: !nestData.url,
+    onData: ({ data }) => {
+      const updatedPilot = data.data.pilotUpdated.pilot
+      setPilots(filterPilots(pilots, updatedPilot))
+    },
   })
 
   useEffect(() => {
-    if (data) {
+    resetAll()
+    if (data && !error) {
       const { violations, ...rest } = data.getNest
-
       setPilots(violations)
       setNestData(rest)
     }
-  }, [data])
+  }, [data, error])
 
   return {
     setPilots,
+    error,
     pilots,
     loading,
     nestData,

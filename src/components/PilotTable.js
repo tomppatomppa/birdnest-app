@@ -1,4 +1,3 @@
-import * as React from 'react'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -6,39 +5,7 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-
-import useStore from '../store'
-import useNest from '../hooks/useNest'
-import { useSubscription } from '@apollo/client'
-import { PILOT_UPDATED } from '../graphql/subscriptions'
-/**
- *
- * @param {*} lastSeen date to compare
- * @returns Time difference in minutes between given date and current date
- */
-export function getTimeDifferenceMinutes(lastSeen) {
-  const diff = Math.abs(Date.parse(lastSeen) - Date.now())
-  const minutes = Math.floor(diff / 1000 / 60)
-
-  return minutes
-}
-/**
- *
- * @param {*} pilots existing array of pilots
- * @param {*} updatedPilot updated pilot
- * @returns Filter out updated pilot if it exists,
- *  or if a pilot has NOT been seen in the last 10 minutes
- *  add updated pilot to array
- */
-const filterPilots = (pilots = [], updatedPilot) => {
-  const filteredPilots = pilots.filter(
-    (pilot) =>
-      pilot.pilotId !== updatedPilot.pilotId &&
-      getTimeDifferenceMinutes(pilot.lastSeen) < 10
-  )
-
-  return filteredPilots.concat(updatedPilot)
-}
+import { getTimeDifferenceMinutes } from '../hooks/useNest'
 
 function createPilotData({
   pilotId,
@@ -61,26 +28,13 @@ function createPilotData({
   return pilot
 }
 
-export default function PilotTable() {
-  const nest = useStore((state) => state.nest)
-  const { pilots, loading, nestData, setPilots } = useNest({ getNestId: nest })
+export default function PilotTable({ pilots }) {
   const allPilots = pilots ? pilots.map((pilot) => createPilotData(pilot)) : []
-  const [added, setAdded] = React.useState('')
-  //Listen for updated pilots
-  useSubscription(PILOT_UPDATED, {
-    variables: {
-      nestUrl: nestData.url,
-    },
-    onData: ({ data }) => {
-      const updatedPilot = data.data.pilotUpdated.pilot
-      setAdded(() => updatedPilot.pilotId)
-      setPilots(filterPilots(pilots, updatedPilot))
-    },
-  })
 
-  if (loading) {
+  if (!pilots) {
     return <div>Loading pilots..</div>
   }
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -99,11 +53,6 @@ export default function PilotTable() {
             .reverse()
             .map((row) => (
               <TableRow
-                style={{
-                  backgroundColor:
-                    added === row.pilotId ? 'MediumSeaGreen' : 'WhiteSmoke',
-                  transition: '2s',
-                }}
                 key={row.pilotId}
                 sx={{
                   '&:last-child td, &:last-child th': { border: 0 },

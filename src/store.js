@@ -1,11 +1,13 @@
 import create from 'zustand'
-
-const useStore = create((set) => ({
-  bird: '',
-  setBird: (bird) => set(() => ({ bird: bird })),
+const initialState = {
   nest: '',
   nests: [],
-  setNests: (nests) => set(() => ({ nests: [nests] })),
+}
+
+const useStore = create((set) => ({
+  ...initialState,
+  setNests: (nests) => set(() => ({ nests: nests })),
   setNest: (nest) => set(() => ({ nest: nest })),
+  reset: () => set(initialState),
 }))
 export default useStore

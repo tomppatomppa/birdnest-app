@@ -5,6 +5,9 @@ export const GET_BIRDS = gql`
   query {
     getBirds {
       name
+      protectedNests {
+        url
+      }
     }
   }
 `

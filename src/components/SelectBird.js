@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -9,24 +9,33 @@ import { GET_BIRDS } from '../graphql/queries'
 import useBirds from '../hooks/useBirds'
 import useStore from '../store'
 
-const defaultNestUrl = 'assignments.reaktor.com/birdnest/drones'
-
 const SelectBird = () => {
+  const [bird, setBird] = useState('')
   const { birds, loading, error } = useBirds(GET_BIRDS)
-  const { bird, setBird, setNest } = useStore((state) => state)
+  const { setNest, setNests, reset } = useStore((state) => state)
 
+  const handleSelectBird = (e) => {
+    const currentBird = birds.find((b) => b.name === e.target.value)
+    reset() //Reset Zustand store when bird changes
+    setBird(currentBird.name)
+    if (currentBird.protectedNests[0]) {
+      setNest(currentBird.protectedNests[0].url)
+      setNests(currentBird.protectedNests)
+    }
+  }
+
+  //Set default bird
   useEffect(() => {
-    //Set default to first bird in array on initial mount
     const setDefaultBird = () => {
       const [defaultBird] = birds
       setBird(defaultBird.name)
-      //Set default nest for testing
-      setNest(defaultNestUrl)
+      setNests(defaultBird.protectedNests)
+      setNest(defaultBird.protectedNests[0]?.url)
     }
     if (!loading && !error) {
       setDefaultBird()
     }
-  }, [birds, loading, error, setBird, setNest])
+  }, [birds, loading, error, setBird, setNest, setNests])
 
   if (loading) {
     return <div>loading birds..</div>
@@ -35,15 +44,12 @@ const SelectBird = () => {
   if (error) {
     return <div>Something went wrong loading birds</div>
   }
+
   return (
     <Box minWidth={120}>
       <FormControl style={{ width: 240, marginRight: 12 }}>
         <InputLabel>Birds</InputLabel>
-        <Select
-          value={bird}
-          label="Bird"
-          onChange={(e) => setBird(e.target.value)}
-        >
+        <Select value={bird} label="Bird" onChange={handleSelectBird}>
           {birds.map((bird) => (
             <MenuItem key={bird.name} value={bird.name}>
               {bird.name}

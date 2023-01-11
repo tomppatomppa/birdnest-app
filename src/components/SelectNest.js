@@ -1,4 +1,3 @@
-import * as React from 'react'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -7,14 +6,14 @@ import Select from '@mui/material/Select'
 import useStore from '../store'
 
 const SelectNest = () => {
-  const { nest, setNest, nests, bird } = useStore((state) => state)
+  const { nest, nests, setNest } = useStore((state) => state)
 
   const handleSetNest = (event) => {
     setNest(event.target.value)
   }
 
   if (nests[0] === undefined) {
-    return <div>no nests avaliable for {bird} </div>
+    return <div>no nests avaliable for selected bird </div>
   }
 
   return (
