@@ -1,8 +1,7 @@
-import { useQuery, useSubscription } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { useEffect, useState } from 'react'
 
 import { GET_NEST } from '../graphql/queries'
-import { PILOT_UPDATED } from '../graphql/subscriptions'
 
 /**
  *
@@ -23,7 +22,7 @@ export const getTimeDifferenceMinutes = (lastSeen) => {
  *  or if a pilot has NOT been seen in the last 10 minutes
  *  add updated pilot to array
  */
-const filterPilots = (pilots = [], updatedPilot) => {
+export const filterPilots = (pilots = [], updatedPilot) => {
   const filteredPilots = pilots.filter(
     (pilot) =>
       pilot.pilotId !== updatedPilot.pilotId &&
@@ -47,17 +46,6 @@ const useNest = (variables) => {
     setNestData('')
     setPilots([])
   }
-
-  useSubscription(PILOT_UPDATED, {
-    variables: {
-      nestUrl: nestData.url,
-    },
-    skip: !nestData.url,
-    onData: ({ data }) => {
-      const updatedPilot = data.data.pilotUpdated.pilot
-      setPilots(filterPilots(pilots, updatedPilot))
-    },
-  })
 
   useEffect(() => {
     resetAll()

@@ -12,16 +12,12 @@ const SelectNest = () => {
     setNest(event.target.value)
   }
 
-  if (nests[0] === undefined) {
-    return <div>no nests avaliable for selected bird </div>
-  }
-
   return (
     <Box sx={{ minWidth: 120 }}>
       <FormControl fullWidth>
         <InputLabel>Nests</InputLabel>
         <Select value={nest} label="Nest" onChange={handleSetNest}>
-          {nests.map((nest) => (
+          {nests?.map((nest) => (
             <MenuItem key={nest.url} value={nest.url}>
               {nest.url}
             </MenuItem>

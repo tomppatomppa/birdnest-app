@@ -8,6 +8,6 @@ const useStore = create((set) => ({
   ...initialState,
   setNests: (nests) => set(() => ({ nests: nests })),
   setNest: (nest) => set(() => ({ nest: nest })),
-  reset: () => set(initialState),
+  resetStore: () => set(initialState),
 }))
 export default useStore

@@ -10,17 +10,17 @@ import useStore from './store'
 
 function App() {
   const nest = useStore((state) => state.nest)
-  const { pilots } = useNest({
+  const { pilots, setPilots } = useNest({
     getNestId: nest,
   })
 
   return (
     <Box>
       <Navbar>
-        <SelectNest />
         <SelectBird />
       </Navbar>
-      <PilotTable pilots={pilots} />
+      <SelectNest />
+      <PilotTable pilots={pilots} setPilots={setPilots} />
     </Box>
   )
 }

@@ -12,11 +12,11 @@ import useStore from '../store'
 const SelectBird = () => {
   const [bird, setBird] = useState('')
   const { birds, loading, error } = useBirds(GET_BIRDS)
-  const { setNest, setNests, reset } = useStore((state) => state)
+  const { setNest, setNests, resetStore } = useStore((state) => state)
 
   const handleSelectBird = (e) => {
     const currentBird = birds.find((b) => b.name === e.target.value)
-    reset() //Reset Zustand store when bird changes
+    resetStore() //Reset Zustand store when bird changes
     setBird(currentBird.name)
     if (currentBird.protectedNests[0]) {
       setNest(currentBird.protectedNests[0].url)
