@@ -17,9 +17,9 @@ function App() {
   return (
     <Box>
       <Navbar>
+        <SelectNest />
         <SelectBird />
       </Navbar>
-      <SelectNest />
       <PilotTable pilots={pilots} />
     </Box>
   )
