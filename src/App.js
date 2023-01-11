@@ -1,15 +1,15 @@
 import { Box } from '@mui/material'
 
-import Bird from './components/Bird'
 import Navbar from './components/Navbar'
 import PilotTable from './components/PilotTable'
 import SelectBird from './components/SelectBird'
+import SelectNest from './components/SelectNest'
 import useNest from './hooks/useNest'
 
 import useStore from './store'
 
 function App() {
-  const { nest } = useStore((state) => state)
+  const nest = useStore((state) => state.nest)
   const { pilots } = useNest({
     getNestId: nest,
   })
@@ -19,7 +19,7 @@ function App() {
       <Navbar>
         <SelectBird />
       </Navbar>
-      <Bird />
+      <SelectNest />
       <PilotTable pilots={pilots} />
     </Box>
   )
