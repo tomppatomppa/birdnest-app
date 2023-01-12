@@ -14,23 +14,6 @@ export const getTimeDifferenceMinutes = (lastSeen) => {
 
   return minutes
 }
-/**
- *
- * @param {*} pilots existing array of pilots
- * @param {*} updatedPilot updated pilot
- * @returns Filter out updated pilot if it exists,
- *  or if a pilot has NOT been seen in the last 10 minutes
- *  add updated pilot to array
- */
-export const filterPilots = (pilots = [], updatedPilot) => {
-  const filteredPilots = pilots.filter(
-    (pilot) =>
-      pilot.pilotId !== updatedPilot.pilotId &&
-      getTimeDifferenceMinutes(pilot.lastSeen) < 10
-  )
-
-  return filteredPilots.concat(updatedPilot)
-}
 
 const useNest = (variables) => {
   const [nestData, setNestData] = useState([])

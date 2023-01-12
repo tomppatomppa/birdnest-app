@@ -20,6 +20,7 @@ function App() {
         <SelectBird />
       </Navbar>
       <SelectNest />
+
       <PilotTable pilots={pilots} setPilots={setPilots} />
     </Box>
   )

@@ -5,33 +5,28 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import { filterPilots, getTimeDifferenceMinutes } from '../hooks/useNest'
+import { getTimeDifferenceMinutes } from '../hooks/useNest'
 import { useEffect, useState } from 'react'
 import { useSubscription } from '@apollo/client'
 import { PILOT_UPDATED } from '../graphql/subscriptions'
 import useStore from '../store'
+/**
+ *
+ * @param {*} pilots existing array of pilots
+ * @param {*} updatedPilot updated pilot
+ * @returns Filter out updated pilot if it exists,
+ *  or if a pilot has NOT been seen in the last 10 minutes
+ *  add updated pilot to array
+ */
+export const filterPilots = (pilots = [], updatedPilot) => {
+  const filteredPilots = pilots.filter(
+    (pilot) =>
+      pilot.pilotId !== updatedPilot.pilotId &&
+      getTimeDifferenceMinutes(pilot.lastSeen) < 10
+  )
 
-function createPilotData({
-  pilotId,
-  firstName,
-  lastName,
-  phoneNumber,
-  email,
-  lastSeen,
-  drone,
-}) {
-  const { confirmedDistance } = drone
-  const pilot = {
-    fullName: firstName + ' ' + lastName,
-    confirmedDistance: confirmedDistance,
-    email: email,
-    phoneNumber: phoneNumber,
-    lastSeen: lastSeen,
-    pilotId: pilotId,
-  }
-  return pilot
+  return filteredPilots.concat(updatedPilot)
 }
-
 export default function PilotTable({ pilots, setPilots }) {
   const [recentlyAddedPilots, setRecentlyAddedPilots] = useState([])
   const nest = useStore((state) => state.nest)
@@ -50,7 +45,7 @@ export default function PilotTable({ pilots, setPilots }) {
     variables: {
       nestUrl: nest,
     },
-    skip: !nest,
+    skip: !pilots.length,
     onData: ({ data }) => {
       const updatedPilot = data.data.pilotUpdated.pilot
       setPilots(filterPilots(pilots, updatedPilot))
@@ -58,11 +53,7 @@ export default function PilotTable({ pilots, setPilots }) {
     },
   })
 
-  if (!pilots) {
-    return <div>No pilots available..</div>
-  }
-
-  const allPilots = pilots.map((pilot) => createPilotData(pilot))
+  const allPilots = pilots.map((pilot) => pilot).reverse()
 
   return (
     <TableContainer component={Paper}>
@@ -77,33 +68,31 @@ export default function PilotTable({ pilots, setPilots }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {allPilots
-            .slice(0)
-            .reverse()
-            .map((row) => (
-              <TableRow
-                key={row.pilotId}
-                sx={{
-                  '&:last-child td, &:last-child th': { border: 0 },
-                  backgroundColor: recentlyAddedPilots.includes(row.pilotId)
-                    ? 'lightgreen'
-                    : '',
-                  transition: 'background-color 1s ease-in-out',
-                }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.fullName}
-                </TableCell>
-                <TableCell align="right">
-                  {getTimeDifferenceMinutes(row.lastSeen)}
-                </TableCell>
-                <TableCell align="right">
-                  {Number(row.confirmedDistance).toFixed(2)}
-                </TableCell>
-                <TableCell align="right">{row.email}</TableCell>
-                <TableCell align="right">{row.phoneNumber}</TableCell>
-              </TableRow>
-            ))}
+          {allPilots.map((row) => (
+            <TableRow
+              data-testid="pilotItemRow"
+              key={row.pilotId}
+              sx={{
+                '&:last-child td, &:last-child th': { border: 0 },
+                backgroundColor: recentlyAddedPilots.includes(row.pilotId)
+                  ? 'lightgreen'
+                  : '',
+                transition: 'background-color 1s ease-in-out',
+              }}
+            >
+              <TableCell component="th" scope="row">
+                {row.firstName + ' ' + row.lastName}
+              </TableCell>
+              <TableCell align="right">
+                {getTimeDifferenceMinutes(row.lastSeen)}
+              </TableCell>
+              <TableCell align="right">
+                {Number(row.drone.confirmedDistance).toFixed(2)}
+              </TableCell>
+              <TableCell align="right">{row.email}</TableCell>
+              <TableCell align="right">{row.phoneNumber}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </TableContainer>
