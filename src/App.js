@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 
 import Navbar from './components/Navbar'
 import PilotTable from './components/PilotTable'
-import SelectBird from './components/SelectBird'
+import { SelectBirdContainer } from './components/SelectBird'
 import SelectNest from './components/SelectNest'
 import useNest from './hooks/useNest'
 
@@ -17,7 +17,7 @@ function App() {
   return (
     <Box>
       <Navbar>
-        <SelectBird />
+        <SelectBirdContainer />
       </Navbar>
       <SelectNest />
 
