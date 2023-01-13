@@ -45,7 +45,7 @@ export default function PilotTable({ pilots, setPilots }) {
     variables: {
       nestUrl: nest,
     },
-    skip: !pilots.length,
+    skip: !nest, //Skip subscription if no url is selected
     onData: ({ data }) => {
       const updatedPilot = data.data.pilotUpdated.pilot
       setPilots(filterPilots(pilots, updatedPilot))

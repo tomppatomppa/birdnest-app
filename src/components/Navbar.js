@@ -9,7 +9,7 @@ const style = {
 }
 
 const Navbar = (props) => {
-  return <div style={style}>{props.children}</div>
+  return <nav style={style}>{props.children}</nav>
 }
 
 export default Navbar
