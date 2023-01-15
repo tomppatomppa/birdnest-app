@@ -21,7 +21,7 @@ const useNest = (variables) => {
 
   const { data, loading, error, ...result } = useQuery(GET_NEST, {
     variables: { ...variables },
-    fetchPolicy: 'no-cache', //Turn off caching for pilots
+    fetchPolicy: 'no-cache', //Turn off cache for pilots
     skip: !variables.getNestId,
   })
 

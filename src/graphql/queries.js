@@ -13,7 +13,7 @@ export const GET_BIRDS = gql`
 `
 
 export const GET_NEST = gql`
-  query ($getNestId: String) {
+  query getNest($getNestId: String) {
     getNest(id: $getNestId) {
       ...NestFields
       violations {

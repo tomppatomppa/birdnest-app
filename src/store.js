@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+
 const initialState = {
   nest: '',
   nests: [],
@@ -10,4 +11,5 @@ const useStore = create((set) => ({
   setNest: (nest) => set(() => ({ nest: nest })),
   resetStore: () => set(initialState),
 }))
+
 export default useStore

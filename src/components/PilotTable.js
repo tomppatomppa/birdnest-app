@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react'
 import { useSubscription } from '@apollo/client'
 import { PILOT_UPDATED } from '../graphql/subscriptions'
 import useStore from '../store'
+
 /**
  *
  * @param {*} pilots existing array of pilots
@@ -27,6 +28,7 @@ export const filterPilots = (pilots = [], updatedPilot) => {
 
   return filteredPilots.concat(updatedPilot)
 }
+
 export default function PilotTable({ pilots, setPilots }) {
   const [recentlyAddedPilots, setRecentlyAddedPilots] = useState([])
   const nest = useStore((state) => state.nest)

@@ -9,6 +9,28 @@ import { GET_BIRDS } from '../graphql/queries'
 import useBirds from '../hooks/useBirds'
 import useStore from '../store'
 
+const SelectBird = ({ bird, birds, handleSelectBird }) => {
+  return (
+    <Box minWidth={120}>
+      <FormControl style={{ width: 240, marginRight: 12 }}>
+        <InputLabel>Birds</InputLabel>
+        <Select
+          value={bird}
+          label="Bird"
+          placeholder="Select a bird"
+          onChange={handleSelectBird}
+        >
+          {birds?.map((bird) => (
+            <MenuItem key={bird.name} value={bird.name}>
+              {bird.name}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
+  )
+}
+
 export const SelectBirdContainer = () => {
   const [bird, setBird] = useState('')
   const { birds, loading, error } = useBirds(GET_BIRDS)
@@ -43,30 +65,9 @@ export const SelectBirdContainer = () => {
   if (error) {
     return <div>Something went wrong loading birds</div>
   }
+
   return (
     <SelectBird bird={bird} birds={birds} handleSelectBird={handleSelectBird} />
-  )
-}
-
-const SelectBird = ({ bird, birds, handleSelectBird }) => {
-  return (
-    <Box minWidth={120}>
-      <FormControl style={{ width: 240, marginRight: 12 }}>
-        <InputLabel>Birds</InputLabel>
-        <Select
-          value={bird}
-          label="Bird"
-          placeholder="Select a bird"
-          onChange={handleSelectBird}
-        >
-          {birds?.map((bird) => (
-            <MenuItem key={bird.name} value={bird.name}>
-              {bird.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
   )
 }
 
