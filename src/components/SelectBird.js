@@ -15,14 +15,15 @@ export const SelectBirdContainer = () => {
   const { setNest, setNests, resetStore } = useStore((state) => state)
 
   const handleSelectBird = (e) => {
-    const currentBird = birds.find((b) => b.name === e.target.value)
+    const selectedBird = birds.find((b) => b.name === e.target.value)
     resetStore() //Reset Zustand store when bird changes
-    setBird(currentBird.name)
-    if (currentBird.protectedNests[0]) {
-      setNest(currentBird.protectedNests[0].url)
-      setNests(currentBird.protectedNests)
+    setBird(selectedBird.name)
+    if (selectedBird.protectedNests[0]) {
+      setNest(selectedBird.protectedNests[0].url)
+      setNests(selectedBird.protectedNests)
     }
   }
+  //Set default
   useEffect(() => {
     const setDefaultBird = () => {
       const [defaultBird] = birds
@@ -46,6 +47,7 @@ export const SelectBirdContainer = () => {
     <SelectBird bird={bird} birds={birds} handleSelectBird={handleSelectBird} />
   )
 }
+
 const SelectBird = ({ bird, birds, handleSelectBird }) => {
   return (
     <Box minWidth={120}>
