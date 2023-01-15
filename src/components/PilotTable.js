@@ -80,6 +80,8 @@ export default function PilotTable({ pilots, setPilots }) {
                   ? 'lightgreen'
                   : '',
                 transition: 'background-color 1s ease-in-out',
+                display:
+                  getTimeDifferenceMinutes(row.lastSeen) > 9 ? 'none' : '',
               }}
             >
               <TableCell component="th" scope="row">
