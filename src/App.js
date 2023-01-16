@@ -1,5 +1,4 @@
 import { Box } from '@mui/material'
-import { useEffect } from 'react'
 
 import Navbar from './components/Navbar'
 import PilotTable from './components/PilotTable'

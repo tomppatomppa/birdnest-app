@@ -4,14 +4,13 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
 
 const createApolloClient = () => {
-  //https://birdnest-api.herokuapp.com/
   const httpLink = new HttpLink({
-    uri: 'http://localhost:4000/',
+    uri: 'https://birdnest-api.herokuapp.com/',
   })
-  //wss://birdnest-api.herokuapp.com/
+
   const wsLink = new GraphQLWsLink(
     createClient({
-      url: 'ws://localhost:4000/',
+      url: 'wss://birdnest-api.herokuapp.com/',
     })
   )
   const splitLink = split(

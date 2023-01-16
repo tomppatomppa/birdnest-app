@@ -36,14 +36,13 @@ const expectPilotRowItemToHaveCorrectInformation = (
   const wrappedItem = within(item)
 
   expect(wrappedItem.getByText(fullName)).toBeDefined()
-
   expect(wrappedItem.getByText(confirmedDistance)).toBeDefined()
   expect(wrappedItem.getByText(email)).toBeDefined()
   expect(wrappedItem.getByText(phoneNumber)).toBeDefined()
   expect(wrappedItem.getByText(lastSeen)).toBeDefined()
 }
 
-test('renders content', () => {
+test('renders pilots correctly', () => {
   render(
     <MockedProvider>
       <PilotTable pilots={pilots} />
