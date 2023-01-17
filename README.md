@@ -9,8 +9,6 @@ https://assignments.reaktor.com/birdnest/?_gl=1*1w6n22b*_ga*MTA0Mzg1NTY5MC4xNjcw
 
 This is the frontend implementation for https://github.com/tomppatomppa/birdnest-api.git
 
-
-
 ### Built With
 
 
@@ -55,6 +53,7 @@ Running the server locally
 ## Acknowledgments
 
 https://reactjs.org/
+https://mui.com/
 https://www.apollographql.com/docs/
 
 
