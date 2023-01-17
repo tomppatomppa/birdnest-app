@@ -41,9 +41,8 @@ Running the server locally
       createClient({
         url: 'wss://yourServer.com/',
       })
-  )
-  
-   ```
+    )
+    ```
 4. start the app
    ```
    npm start
