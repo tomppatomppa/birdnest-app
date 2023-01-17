@@ -32,19 +32,19 @@ Running the server locally
    ```sh
    npm install
    ```
-4. Change the urls in apolloClient.js to where to deployed your server
+3. Change the urls in apolloClient.js to where to deployed your server
    ```js
     const httpLink = new HttpLink({
         uri: 'https://yourServer.com/',
     })
-    const wsLink = new GraphQLWsLink(
+    const wsLink = new GraphQLWsLink( 
       createClient({
         url: 'wss://yourServer.com/',
       })
   )
-   const API_KEY = 'ENTER API KEY';
+  
    ```
-5. start
+4. start the app
    ```
    npm start
    ```
