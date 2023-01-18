@@ -7,7 +7,7 @@
 
 https://assignments.reaktor.com/birdnest/?_gl=1*1w6n22b*_ga*MTA0Mzg1NTY5MC4xNjcwNjExNTMx*_ga_DX023XT0SX*MTY3MDYxMTUzMC4xLjEuMTY3MDYxMTU1MC40MC4wLjA.
 
-This is the frontend implementation for https://github.com/tomppatomppa/birdnest-api.git
+The backend implementation for this application can be found here:  https://github.com/tomppatomppa/birdnest-api.git
 
 ### Built With
 
@@ -15,6 +15,7 @@ This is the frontend implementation for https://github.com/tomppatomppa/birdnest
 * React
 * Material Ui
 * Graphql
+* Zustand
 
 
 
